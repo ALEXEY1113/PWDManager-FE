@@ -1,0 +1,21 @@
+<mat-toolbar class="mat-elevation-z8">
+  Password Manager
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav mode="side" opened class="mat-elevation-z8">
+
+    <button mat-button class="menu-button" routerLink="/">
+      <mat-icon>key</mat-icon>
+      <span>Passwords</span>
+    </button>
+
+  </mat-sidenav>
+  
+  <mat-sidenav-content>
+    <div class="content mat-elevation-z8">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+  
+</mat-sidenav-container>

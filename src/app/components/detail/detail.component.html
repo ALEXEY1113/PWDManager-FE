@@ -1,0 +1,62 @@
+<div class="back-button">
+    <a mat-raised-button color="secondary" [routerLink]="['/']">Back</a>
+</div>
+<br/>
+
+<div class="container">
+    <form role="form" [formGroup]="credentialForm" (ngSubmit)="saveDetails(credentialForm)">
+        <div class="form-content">
+            <div class="form-group">
+                <mat-form-field appearance="outline" class="item-form">
+                    <mat-label>URL</mat-label>
+                    <input matInput placeholder="https://www.example.com" formControlName="url" />
+                    
+                    <mat-error>URL is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput inputmode="tel" placeholder="Type name" formControlName="name" />
+                    
+                    <mat-error>Name is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field appearance="outline">
+                    <mat-label>Username</mat-label>
+                    <input matInput inputmode="tel" placeholder="Type your username" formControlName="username" />
+                    
+                    <mat-error>Username is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="getTypeInput()" type="password" inputmode="tel" placeholder="Type your username" formControlName="password" />
+                    
+                    <mat-error>Password is required</mat-error>
+                </mat-form-field>
+                <mat-checkbox formControlName="hideRequiredControl">Show Password</mat-checkbox>
+                
+                <button mat-icon-button color="primary" aria-label="Clipboard" type="button" [cdkCopyToClipboard]="copyPassword()" *ngIf="!hasId">
+                    <mat-icon>file_copy</mat-icon>
+                </button>
+            </div>
+            <div class="form-group" *ngIf="!hasId">
+                <div mat-dialog-actions align="end">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!credentialForm.valid">Add Credential</button>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="hasId">
+                <div mat-dialog-actions align="end">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!credentialForm.valid">Edit Credential</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="notepad-clipboard" *ngIf="!hasId">
+        <label for="notepad-textarea">Textarea to test clipboard</label><br/>
+        <textarea id="notepad-textarea" cols="60" rows="10"></textarea>
+    </div>
+</div>
