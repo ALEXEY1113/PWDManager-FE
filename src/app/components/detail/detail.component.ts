@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { ApiRestService } from '../../services/api-rest.service';
-import { CredentialResponse } from '../../models/credential-response.model';
+import { PasswordCardResponse } from '../../models/credential-response.model';
 
 @Component({
   selector: 'app-detail',
@@ -11,17 +12,17 @@ import { CredentialResponse } from '../../models/credential-response.model';
 })
 export class DetailComponent implements OnInit {
   
-  credential: CredentialResponse;
-  credentialForm: FormGroup;
+  credential: PasswordCardResponse;
+  pwdCardForm: FormGroup;
   typeInput: string = 'password';
   hasIdRedirect: any = '';
+  urlRegex: any = '(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})';
 
   constructor(private fb: FormBuilder, private activateRoute: ActivatedRoute, private router: Router, private apiRestService: ApiRestService) {
+    this.credential = {} as PasswordCardResponse;
     
-    this.credential = {} as CredentialResponse;
-    
-    this.credentialForm = this.fb.group({
-      url: [null, [Validators.required]],
+    this.pwdCardForm = this.fb.group({
+      url: [null, [Validators.required, Validators.pattern(this.urlRegex)]],
       name: [null, [Validators.required]],
       username: [null, [Validators.required]],
       password: [null, [Validators.required]],
@@ -29,6 +30,7 @@ export class DetailComponent implements OnInit {
     });
   }
 
+  get form() { return this.pwdCardForm.controls; }
   get hasId() { return this.hasIdRedirect != '' && this.hasIdRedirect != null }
 
   ngOnInit(): void {
@@ -36,33 +38,31 @@ export class DetailComponent implements OnInit {
 
     if (this.hasId) {
       this.credential = this.apiRestService.getCredential(this.hasIdRedirect);
-      this.credentialForm.patchValue(this.credential);
-      this.credentialForm.updateValueAndValidity();
+      this.pwdCardForm.patchValue(this.credential);
+      this.pwdCardForm.updateValueAndValidity();
     }
   }
 
   getTypeInput(): string {
-    return this.credentialForm.get('hideRequiredControl')?.value ? 'text' : 'password';
+    return this.pwdCardForm.get('hideRequiredControl')?.value ? 'text' : 'password';
   }
 
   copyPassword(): string {
-    return this.credentialForm.get('password')?.value;
+    return this.pwdCardForm.get('password')?.value;
   }
 
-  saveDetails(credentialForm: { value: CredentialResponse; }): void {
-    
+  saveDetails(credentialForm: { value: PasswordCardResponse; }): void {
     if (this.hasId) {
-      this.credential.url = this.credentialForm.value.url;
-      this.credential.name = this.credentialForm.value.name;
-      this.credential.username = this.credentialForm.value.username;
-      this.credential.password = this.credentialForm.value.password;
+      this.credential.url = this.pwdCardForm.value.url;
+      this.credential.name = this.pwdCardForm.value.name;
+      this.credential.username = this.pwdCardForm.value.username;
+      this.credential.password = this.pwdCardForm.value.password;
 
       this.apiRestService.editCredential(this.credential);
     } else {
-      this.apiRestService.addCredentials(this.credentialForm.value);
+      this.apiRestService.addCredentials(credentialForm.value);
     }
     
     this.router.navigate(['/']);
   }
-
 }

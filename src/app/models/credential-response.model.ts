@@ -1,4 +1,4 @@
-export class CredentialResponse {
+export class PasswordCardResponse {
     id: number;
     url: string;
     name: string;

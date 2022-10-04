@@ -4,14 +4,15 @@
 <br/>
 
 <div class="container">
-    <form role="form" [formGroup]="credentialForm" (ngSubmit)="saveDetails(credentialForm)">
+    <form role="form" [formGroup]="pwdCardForm" (ngSubmit)="saveDetails(pwdCardForm)">
         <div class="form-content">
             <div class="form-group">
                 <mat-form-field appearance="outline" class="item-form">
                     <mat-label>URL</mat-label>
                     <input matInput placeholder="https://www.example.com" formControlName="url" />
                     
-                    <mat-error>URL is required</mat-error>
+                    <mat-error *ngIf="form['url'].hasError('required')">URL is required</mat-error>
+                    <mat-error *ngIf="form['url'].hasError('pattern')">Invalid URL format</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-group">
@@ -30,27 +31,27 @@
                     <mat-error>Username is required</mat-error>
                 </mat-form-field>
             </div>
-            <div class="form-group">
-                <mat-form-field appearance="outline">
+            <div class="form-group pwd-utils">
+                <mat-form-field appearance="outline" class="pwd-item">
                     <mat-label>Password</mat-label>
                     <input matInput [type]="getTypeInput()" type="password" inputmode="tel" placeholder="Type your username" formControlName="password" />
                     
                     <mat-error>Password is required</mat-error>
                 </mat-form-field>
-                <mat-checkbox formControlName="hideRequiredControl">Show Password</mat-checkbox>
+                <mat-checkbox formControlName="hideRequiredControl" class="pwd-item">Show Password</mat-checkbox>
                 
-                <button mat-icon-button color="primary" aria-label="Clipboard" type="button" [cdkCopyToClipboard]="copyPassword()" *ngIf="!hasId">
+                <button mat-icon-button color="primary" aria-label="Clipboard" class="pwd-item" type="button" [cdkCopyToClipboard]="copyPassword()" *ngIf="!hasId">
                     <mat-icon>file_copy</mat-icon>
                 </button>
             </div>
             <div class="form-group" *ngIf="!hasId">
-                <div mat-dialog-actions align="end">
-                    <button mat-raised-button color="primary" type="submit" [disabled]="!credentialForm.valid">Add Credential</button>
+                <div mat-dialog-actions>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!pwdCardForm.valid">Add Credential</button>
                 </div>
             </div>
             <div class="form-group" *ngIf="hasId">
-                <div mat-dialog-actions align="end">
-                    <button mat-raised-button color="primary" type="submit" [disabled]="!credentialForm.valid">Edit Credential</button>
+                <div mat-dialog-actions>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!pwdCardForm.valid">Edit Credential</button>
                 </div>
             </div>
         </div>

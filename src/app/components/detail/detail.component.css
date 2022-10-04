@@ -12,3 +12,17 @@
 .item-form {
     align-items: center;
 }
+
+.pwd-utils {
+    display: flex;
+    justify-content: start;
+    align-items: baseline;
+}
+
+.pwd-item {
+    margin-right: 15px;
+}
+
+.notepad-clipboard {
+    margin-top: 15px;
+}

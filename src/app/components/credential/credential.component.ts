@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, pipe, map } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { ApiRestService } from '../../services/api-rest.service';
-import { CredentialResponse } from 'src/app/models/credential-response.model';
+import { PasswordCardResponse } from 'src/app/models/credential-response.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
@@ -14,8 +13,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class CredentialComponent implements OnInit {
 
   public value: string = '';
-  public credentials: CredentialResponse[] = [];
-  public credentialsFiltered: CredentialResponse[] = [];
+  public credentials: PasswordCardResponse[] = [];
+  public credentialsFiltered: PasswordCardResponse[] = [];
   public searchForm: FormGroup;
 
   constructor(private fb: FormBuilder, private api: ApiRestService, private router: Router) {
@@ -42,11 +41,11 @@ export class CredentialComponent implements OnInit {
     });
   }
 
-  onDisplayCredential(credential: CredentialResponse): void {
+  onDisplayCredential(credential: PasswordCardResponse): void {
     this.router.navigate(['detail', credential.id])
   }
 
-  onEditCredential(credential: CredentialResponse): void {
+  onEditCredential(credential: PasswordCardResponse): void {
     this.router.navigate(['/detail/'+ credential.id]);
   }
 

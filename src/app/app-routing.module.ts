@@ -1,4 +1,4 @@
-import { NgModule, Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CredentialComponent } from './components/credential/credential.component';
 import { DetailComponent } from './components/detail/detail.component';

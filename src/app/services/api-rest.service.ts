@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { CredentialResponse } from '../models/credential-response.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+import { PasswordCardResponse } from '../models/credential-response.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -9,11 +10,11 @@ import { environment } from '../../environments/environment';
 })
 export class ApiRestService {
 
-  private dbPwdListsSubject: BehaviorSubject<CredentialResponse[]>;
-  public dbPwdList$: Observable<CredentialResponse[]>;
+  private dbPwdListsSubject: BehaviorSubject<PasswordCardResponse[]>;
+  public dbPwdList$: Observable<PasswordCardResponse[]>;
 
   constructor(private http: HttpClient) {
-    this.dbPwdListsSubject = new BehaviorSubject<CredentialResponse[]>([]);
+    this.dbPwdListsSubject = new BehaviorSubject<PasswordCardResponse[]>([]);
     this.dbPwdList$ = this.dbPwdListsSubject.asObservable();
   }
 
@@ -21,8 +22,8 @@ export class ApiRestService {
     return new HttpHeaders().set('Type-Content', 'application/json');
   }
 
-  get dbPasswords(): CredentialResponse[] { return this.dbPwdListsSubject.value; }
-  set dbPasswords(creds: CredentialResponse[]) { this.dbPwdListsSubject.next(creds); }
+  get dbPasswords(): PasswordCardResponse[] { return this.dbPwdListsSubject.value; }
+  set dbPasswords(creds: PasswordCardResponse[]) { this.dbPwdListsSubject.next(creds); }
 
   getAllCredentials(): Observable<any> {
     let getCredentialsUrl = environment.urlBase;
@@ -30,7 +31,7 @@ export class ApiRestService {
     return this.http.get<any>(getCredentialsUrl, { headers: this.Headers });
   }
 
-  getCredential(id: number): CredentialResponse {
+  getCredential(id: number): PasswordCardResponse {
     let credential = {};
     
     this.dbPasswords.forEach(item => {
@@ -39,10 +40,10 @@ export class ApiRestService {
       }
     });
 
-    return credential as CredentialResponse;
+    return credential as PasswordCardResponse;
   }
 
-  addCredentials(credential: CredentialResponse): void {
+  addCredentials(credential: PasswordCardResponse): void {
     let addCredentialUrl = environment.urlBase;
 
     this.http.post<any>(addCredentialUrl, credential, { headers: this.Headers }).subscribe(
@@ -54,7 +55,7 @@ export class ApiRestService {
     );
   }
 
-  editCredential(credential: CredentialResponse): void {
+  editCredential(credential: PasswordCardResponse): void {
     let editCredentialUrl = environment.urlBase + '/' + credential.id;
 
     this.http.put<any>(editCredentialUrl, credential, { headers: this.Headers }).subscribe(
@@ -77,58 +78,4 @@ export class ApiRestService {
       }
     );
   }
-
-  /*private credentialsMock(): CredentialResponse[] {
-    return [
-      {
-        id: 1,
-        url: "www.nike.com",
-        name: "Nike",
-        username: "nikeUser",
-        password: "P4s$w0rd1!"
-      },
-      {
-        id: 2,
-        url: "www.adidas.com",
-        name: "Adi",
-        username: "adidasUser",
-        password: "P4s$w0rd2!"
-      },
-      {
-        id: 3,
-        url: "www.puma.com",
-        name: "Puma",
-        username: "pumaUser",
-        password: "P4s$w0rd3!"
-      },
-      {
-        id: 4,
-        url: "www.reebok.com",
-        name: "R-Bok",
-        username: "reebokUser",
-        password: "P4s$w0rd4!"
-      },
-      {
-        id: 5,
-        url: "www.joma.com",
-        name: "Joma",
-        username: "jomaUser",
-        password: "P4s$w0rd5!"
-      },
-      {
-        id: 6,
-        url: "www.asics.com",
-        name: "Siks",
-        username: "asicsUser",
-        password: "P4s$w0rd6!"
-      },
-      {
-        id: 7,
-        url: "www.underarmnor.com",
-        name: "U-Armor",
-        username: "underArmorUser",
-        password: "P4s$w0rd7!"
-      }
-    ];
-  }*/
 }
